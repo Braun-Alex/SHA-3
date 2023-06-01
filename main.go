@@ -10,12 +10,13 @@ const rate int = 576
 const rounds int = 24
 const l = 6
 const w = 64
+const d = 512
 
 func xor(x, y bool) bool {
 	return (x && !y) || (!x && y)
 }
 
-func sha3(data []byte) []byte {
+func sha3(data []byte) [d / 8]byte {
 	countOfBits := 8 * len(data)
 	bits := make([]bool, countOfBits)
 	for i, byteValue := range data {
@@ -57,13 +58,31 @@ func sha3(data []byte) []byte {
 	}
 	for i := 0; i < countOfBlocks-1; i++ {
 		iterationBlock := bits[i : i+rate]
-		for j := 0; j < b-rate; j++ {
+		for j := 0; j < capacity; j++ {
 			iterationBlock = append(iterationBlock, false)
 		}
 		for j := 0; j < b; j++ {
 			state[j] = xor(state[j], iterationBlock[j])
 		}
+		state = keccakPermutation(state)
 	}
+	var Z []bool
+	for d <= len(Z) {
+		Z = append(Z, state[:rate]...)
+		if d <= len(Z) {
+			break
+		} else {
+			state = keccakPermutation(state)
+		}
+	}
+	Z = Z[:d]
+	var bytes [d / 8]byte
+	for i := 0; i < d; i++ {
+		if Z[i] {
+			bytes[i/8] |= 1 << (7 - (i % 8))
+		}
+	}
+	return bytes
 }
 
 func keccakPermutation(state [b]bool) [b]bool {
@@ -75,6 +94,23 @@ func keccakPermutation(state [b]bool) [b]bool {
 			}
 		}
 	}
+	for round := 0; round < rounds; round++ {
+		A = theta(A)
+		A = rho(A)
+		A = pi(A)
+		A = chi(A)
+		A = iota(A, round)
+	}
+	bitIndex := 0
+	for y := 0; y < 5; y++ {
+		for x := 0; x < 5; x++ {
+			for z := 0; z < w; z++ {
+				state[bitIndex] = A[x][y][z]
+				bitIndex++
+			}
+		}
+	}
+	return state
 }
 
 func theta(A [5][5][w]bool) [5][5][w]bool {
