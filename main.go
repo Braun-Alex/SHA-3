@@ -7,7 +7,11 @@ const rate int = 576
 const rounds int = 24
 const w = 64
 
-func sha3(data []byte) {
+func xor(x, y bool) bool {
+	return (x && !y) || (!x && y)
+}
+
+func sha3(data []byte) []byte {
 	countOfBits := 8 * len(data)
 	bits := make([]bool, countOfBits)
 	for i, byteValue := range data {
@@ -53,12 +57,12 @@ func sha3(data []byte) {
 			iterationBlock = append(iterationBlock, false)
 		}
 		for j := 0; j < b; j++ {
-			state[j] = (state[j] && !iterationBlock[j]) || (!state[j] && iterationBlock[j])
+			state[j] = xor(state[j], iterationBlock[j])
 		}
 	}
 }
 
-func keccakPermutation(state [b]bool) {
+func keccakPermutation(state [b]bool) [b]bool {
 	var A [5][5][w]bool
 	for x := 0; x < 5; x++ {
 		for y := 0; y < 5; y++ {
@@ -69,31 +73,46 @@ func keccakPermutation(state [b]bool) {
 	}
 }
 
-func theta(A [5][5][w]bool) {
+func theta(A [5][5][w]bool) [5][5][w]bool {
 	var C [5][w]bool
 	for x := 0; x < 5; x++ {
 		for z := 0; z < w; z++ {
-			C[x][z] = (A[x][0][z] && !A[x][1][z]) || (!A[x][0][z] && A[x][1][z])
+			C[x][z] = xor(A[x][0][z], A[x][1][z])
 			for y := 2; y < 5; y++ {
-				C[x][z] = (C[x][z] && !A[x][y][z]) || (C[x][z] && A[x][y][z])
+				C[x][z] = xor(C[x][z], A[x][y][z])
 			}
 		}
 	}
 	var D [5][w]bool
 	for x := 0; x < 5; x++ {
 		for z := 0; z < w; z++ {
-			D[x][z] = (C[(x-1)%5][z] && !C[(x+1)%5][(z-1)%w]) ||
-				(!C[(x-1)%5][z] && C[(x+1)%5][(z-1)%w])
+			D[x][z] = xor(C[(x-1)%5][z], C[(x+1)%5][(z-1)%w])
 		}
 	}
 	var R [5][5][w]bool
 	for x := 0; x < 5; x++ {
 		for y := 0; y < 5; y++ {
 			for z := 0; z < w; z++ {
-				R[x][y][z] = (A[x][y][z] && !D[x][z]) || (A[x][y][z] && D[x][z])
+				R[x][y][z] = xor(A[x][y][z], D[x][z])
 			}
 		}
 	}
+	return R
+}
+
+func rho(A [5][5][w]bool) [5][5][w]bool {
+	var R [5][5][w]bool
+	for z := 0; z < w; z++ {
+		R[0][0][z] = A[0][0][z]
+	}
+	x, y := 1, 0
+	for t := 0; t < 24; t++ {
+		for z := 0; z < w; z++ {
+			R[x][y][z] = A[x][y][(z-(t+1)*(t+2)/2)%w]
+		}
+		x, y = y, (2*x+3*y)%5
+	}
+	return R
 }
 
 func main() {
