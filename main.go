@@ -139,6 +139,26 @@ func chi(A [5][5][w]bool) [5][5][w]bool {
 	return R
 }
 
+func rc(t int) bool {
+	if t%255 == 0 {
+		return true
+	}
+	var R []bool
+	R = append(R, true)
+	for i := 0; i < 7; i++ {
+		R = append(R, false)
+	}
+	for i := 1; i <= t%255; i++ {
+		R = append([]bool{false}, R...)
+		R[0] = xor(R[0], R[8])
+		R[4] = xor(R[4], R[8])
+		R[5] = xor(R[5], R[8])
+		R[6] = xor(R[6], R[8])
+		R = R[:8]
+	}
+	return R[0]
+}
+
 func main() {
 	fmt.Print("AAA")
 }
