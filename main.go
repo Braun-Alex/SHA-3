@@ -127,6 +127,18 @@ func pi(A [5][5][w]bool) [5][5][w]bool {
 	return R
 }
 
+func chi(A [5][5][w]bool) [5][5][w]bool {
+	var R [5][5][w]bool
+	for x := 0; x < 5; x++ {
+		for y := 0; y < 5; y++ {
+			for z := 0; z < w; z++ {
+				R[x][y][z] = xor(A[x][y][z], !A[(x+1)%5][y][z] && A[(x+2)%5][y][z])
+			}
+		}
+	}
+	return R
+}
+
 func main() {
 	fmt.Print("AAA")
 }
