@@ -115,6 +115,18 @@ func rho(A [5][5][w]bool) [5][5][w]bool {
 	return R
 }
 
+func pi(A [5][5][w]bool) [5][5][w]bool {
+	var R [5][5][w]bool
+	for x := 0; x < 5; x++ {
+		for y := 0; y < 5; y++ {
+			for z := 0; z < w; z++ {
+				R[x][y][z] = A[(x+3*y)%5][x][z]
+			}
+		}
+	}
+	return R
+}
+
 func main() {
 	fmt.Print("AAA")
 }
