@@ -1,10 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 const b int = 1600
 const rate int = 576
 const rounds int = 24
+const l = 6
 const w = 64
 
 func xor(x, y bool) bool {
@@ -157,6 +161,25 @@ func rc(t int) bool {
 		R = R[:8]
 	}
 	return R[0]
+}
+
+func iota(A [5][5][w]bool, round int) [5][5][w]bool {
+	var R [5][5][w]bool
+	for x := 0; x < 5; x++ {
+		for y := 0; y < 5; y++ {
+			for z := 0; z < w; z++ {
+				R[x][y][z] = A[x][y][z]
+			}
+		}
+	}
+	var RC [w]bool
+	for j := 0; j <= l; j++ {
+		RC[int(math.Pow(2, float64(j)))-1] = rc(j + 7*round)
+	}
+	for z := 0; z < w; z++ {
+		R[0][0][z] = xor(R[0][0][z], RC[z])
+	}
+	return R
 }
 
 func main() {
