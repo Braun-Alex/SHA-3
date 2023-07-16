@@ -7,6 +7,11 @@ func ByteToBits(byteValue byte) []bool {
 		bits = append([]bool{remainder == 1}, bits...)
 		byteValue = byteValue / 2
 	}
+	complementaryBits := make([]bool, 0)
+	for i := 0; i < 8-len(bits); i++ {
+		complementaryBits = append(complementaryBits, false)
+	}
+	bits = append(complementaryBits, bits...)
 	return bits
 }
 

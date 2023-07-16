@@ -12,7 +12,7 @@ func TestLessOneBlock(t *testing.T) {
 	expectedResult := sha3.Sum512(data)
 	actualResult := isha3.Sum512(data)
 	if expectedResult != actualResult {
-		t.Errorf("Expected: %s, actual: %s",
+		t.Errorf("Expected: %s\n, actual: %s",
 			hex.EncodeToString(expectedResult[:]),
 			hex.EncodeToString(actualResult[:]))
 	}
