@@ -1,7 +1,7 @@
 package cmp
 
 func Xor(x, y bool) bool {
-	return (x && !y) || (!x && y)
+	return x != y
 }
 
 func Mod(a, p int) int {

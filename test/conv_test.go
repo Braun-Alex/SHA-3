@@ -32,6 +32,21 @@ func TestConvertingByteToBits(t *testing.T) {
 	}
 }
 
+func TestConvertingBytesToBits(t *testing.T) {
+	bytes := []byte{0, 3, 15, 33, 255}
+	actualBits := conv.BytesToBits(bytes)
+	expectedBits := []bool{false, false, false, false, false, false, false, false,
+		false, false, false, false, false, false, true, true,
+		false, false, false, false, true, true, true, true,
+		false, false, true, false, false, false, false, true,
+		true, true, true, true, true, true, true, true}
+	for i := range actualBits {
+		if actualBits[i] != expectedBits[i] {
+			t.Error("Converting bytes to bits has not been properly implemented")
+		}
+	}
+}
+
 func TestConvertingBitsToBytes(t *testing.T) {
 	testCases := []struct {
 		bitsToConvert []bool

@@ -15,6 +15,15 @@ func ByteToBits(byteValue byte) []bool {
 	return bits
 }
 
+func BytesToBits(bytes []byte) []bool {
+	bits := make([]bool, 0)
+	for _, byteValue := range bytes {
+		bitsSlice := ByteToBits(byteValue)
+		bits = append(bits, bitsSlice...)
+	}
+	return bits
+}
+
 func BitsToBytes(bits []bool) []byte {
 	byteCount := (len(bits) + 7) / 8
 	bytes := make([]byte, byteCount)
