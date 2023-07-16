@@ -1,4 +1,4 @@
-package sha3_512
+package sha3
 
 import (
 	"math"
@@ -41,7 +41,7 @@ func bitsToBytes(bits []bool) []byte {
 	return bytes
 }
 
-func SHA3_512(data []byte) [d / 8]byte {
+func Sum512(data []byte) [d / 8]byte {
 	countOfBits := 8 * len(data)
 	bits := make([]bool, 0)
 	for _, value := range data {

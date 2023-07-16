@@ -1,4 +1,4 @@
-module SHA-3
+module github.com/Braun-Alex/SHA-3
 
 go 1.19
 
