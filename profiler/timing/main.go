@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const Rounds = 100
+const rounds = 100
 
 func main() {
 	data := []byte("StarkNet is an open-source, decentralized platform for building scalable " +
@@ -29,20 +29,20 @@ func main() {
 		"computation and the security of the Ethereum mainnet, StarkNet aims to provide " +
 		"a powerful infrastructure for building scalable and efficient " +
 		"blockchain applications.")
+	// Deferred invoking has been implemented for the correct displaying all the data in the console
+	defer fmt.Printf("The text to hash was: \n%s", data)
 	standardStart := time.Now()
-	for i := 0; i < Rounds; i++ {
+	for i := 0; i < rounds; i++ {
 		_ = sha3.Sum512(data)
 	}
 	standardDuration := time.Since(standardStart)
-	// Deferred invoking has been implemented for the correct displaying all the data in the console
-	defer fmt.Printf("The text to hash was: \n%s", data)
 	defer fmt.Printf("Standard version of SHA3-512 hashes text on average within %v microseconds\n",
-		standardDuration.Microseconds()/Rounds)
+		standardDuration.Microseconds()/rounds)
 	implStart := time.Now()
-	for i := 0; i < Rounds; i++ {
+	for i := 0; i < rounds; i++ {
 		_ = implSha3.Sum512(data)
 	}
 	implDuration := time.Since(implStart)
 	defer fmt.Printf("Implemented version of SHA3-512 hashes text on average within %v microseconds\n",
-		implDuration.Microseconds()/Rounds)
+		implDuration.Microseconds()/rounds)
 }
