@@ -23,6 +23,11 @@ func ConvertDataToState(data string) [keccak.B]bool {
 	return state
 }
 
+/*
+Unit tests data for the Keccak permutation and
+functions: https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-512_1600.pdf
+*/
+
 func TestKeccakPermutation(t *testing.T) {
 	data := "EE A4 41 43 C7 DE 5E 39 91 C9 B9 D8 AA 91 F0 61 8C 43 BB AF 67 3B F7 04 F6 6C " +
 		"4A 35 CD BF CF 6A 3B BC 9F 5A 78 F1 1F 2C 9D 16 F4 5D 31 C2 F4 33 06 BA A9 FB E9 " +

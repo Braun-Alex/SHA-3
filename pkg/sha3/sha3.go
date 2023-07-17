@@ -10,6 +10,8 @@ const B int = 1600
 const Rate int = 576
 const D int = 512
 
+// The Secure Hash Algorithm-3 specification: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
+
 func Sum512(data []byte) [D / 8]byte {
 	countOfBits := 8 * len(data)
 	bits := conv.BytesToBits(data)
