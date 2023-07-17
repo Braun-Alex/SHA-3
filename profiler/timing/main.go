@@ -30,7 +30,7 @@ func main() {
 		"a powerful infrastructure for building scalable and efficient " +
 		"blockchain applications.")
 	// Deferred invoking has been implemented for the correct displaying all the data in the console
-	defer fmt.Printf("The text to hash was: \n%s", data)
+	defer fmt.Printf("The text to hash was: \n\"%s\"", data)
 	standardStart := time.Now()
 	for i := 0; i < rounds; i++ {
 		_ = sha3.Sum512(data)
